@@ -3,13 +3,14 @@ from telegram import Update, ReplyKeyboardMarkup
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, ConversationHandler
 import os, requests, logging
 from bs4 import BeautifulSoup
-from app import get_result, sign_in
+from result_checker import get_result, sign_in
 from io import BytesIO
+from dotenv import load_dotenv
 
-
+load_dotenv()
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
-TOKEN: Final = "7475480887:AAEPisbcm-ml_4B3pVawjdI3LN_6qca0K8I"
+TOKEN: Final = os.getenv('TOKEN')
 BOT_USERNAME: Final = "@FunResultChecker"
 MATRIC, PASSWORD, LEVEL, SEMESTER = range(4)
 
@@ -63,7 +64,7 @@ async def level(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data['level'] = level
     reply_keybd = [['first', 'second']]
     markup = ReplyKeyboardMarkup(reply_keybd, resize_keyboard=True, one_time_keyboard=True)
-    await update.message.reply_text(f"Alright, {level} level. What semeter? e.g first / second", reply_markup=markup)
+    await update.message.reply_text(f"Alright, {level} level. What semeter?", reply_markup=markup)
     return SEMESTER
 
 #validates and storee semester of result to be checked
